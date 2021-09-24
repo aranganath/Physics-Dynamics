@@ -15,7 +15,7 @@ def GenerateData():
 	height = 64
 	FPS = 10
 	seconds = 10
-	radius = 2
+	radius = 1
 	paint_h = int(height/2)
 
 	fourcc = VideoWriter_fourcc(*'MP42')
@@ -23,17 +23,15 @@ def GenerateData():
 
 	if not VideoData:
 		for paint_x in range(-radius, width+radius, 6):
-		    frame = 255*np.ones( 
-		                   (height, width, 3), 
-		                              dtype=np.uint8)
-		    
-		    cv2.circle(frame, (paint_x, paint_h), radius, (0, 0, 0), -1)
+		    frame = np.zeros((height, width), dtype=np.uint8)
+
+		    cv2.circle(frame, (paint_x, paint_h), radius, (255, 255, 255), -1)
 		    
 		    # Store the frames in the list
 
 		    VideoData.append(frame)
 
-		    video.write(frame)
+		    video.write(cv2.cvtColor(frame,cv2.COLOR_GRAY2BGR))
 
 		video.release()
 		VideoData = np.stack(VideoData, axis=0)
